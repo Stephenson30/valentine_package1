@@ -88,7 +88,7 @@ export default function Home() {
         <div className="z-10 font-bricolage-grotesk text-center bg-white/80 backdrop-blur-xl p-10 rounded-3xl shadow-2xl animate-pop">
           <h1
             onClick={() => setSecret(true)}
-            className="text-4xl md:text-5xl font-bold text-pink-600 mb-4 cursor-pointer"
+            className="text-4xl md:text-5xl font-bold text-pink-600 mb-4 cursor-pointer font-bricolage-grotesk"
           >
             {BABE_NAME}, <br/> 
             <br/>
@@ -134,7 +134,7 @@ function Celebration({ name }: { name: string }) {
   return (
     <div className="z-10 font-bricolage-grotesk text-center bg-white/80 backdrop-blur-xl p-12 rounded-3xl shadow-2xl animate-pop">
       <Confetti />
-      <h1 className="text-5xl md:text-6xl font-extrabold text-pink-600 mb-6">
+      <h1 className="text-5xl md:text-6xl font-extrabold text-pink-600 mb-6 font-bricolage-grotesk">
         YAYYYY!!! SHE SAID YES 💖🎉
       </h1>
       <p className="text-2xl text-rose-500 mb-4">
