@@ -87,12 +87,18 @@ export default function Home() {
 
       {!yesClicked ? (
         <div className="z-10 font-bricolage-grotesk text-center bg-white/80 backdrop-blur-xl p-10 rounded-3xl shadow-2xl animate-pop">
+          <Image
+            src="/teddy.jpg"
+            alt="teddy"
+            width={256}
+            height={256}
+            className="mx-auto rounded-full"
+          />
           <h1
             onClick={() => setSecret(true)}
             className="text-4xl md:text-5xl font-bold text-pink-600 mb-4 cursor-pointer font-bricolage-grotesk"
           >
-            {BABE_NAME}, <br />
-            <br />
+            <p className="py-4">{BABE_NAME},</p>
             <span>will you be my Valentine? 💖</span>
           </h1>
 
@@ -147,10 +153,10 @@ function Celebration({ name }: { name: string }) {
         alt="Kid dancing happily"
         width={500}
         height={500}
-        className="mx-auto"
+        className="mx-auto rounded-xl"
       />
 
-      <h1 className="text-4xl font-bold text-pink-600 mb-4">My Treasure 💖</h1>
+      <h1 className="text-4xl font-bold text-pink-600 mb-4 pt-4">My Treasure 💖</h1>
 
       <p className="text-lg text-pink-500 leading-relaxed mb-6">
         Happy Valentine’s Day 💝
