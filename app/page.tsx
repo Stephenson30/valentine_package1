@@ -1,65 +1,158 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Confetti from "@/components/Confetti";
+
+const BABE_NAME = "M. Chioma Maryann 💕";
 
 export default function Home() {
+  const [yesClicked, setYesClicked] = useState(false);
+  const [secret, setSecret] = useState(false);
+  const noButtonRef = useRef<HTMLButtonElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [hearts, setHearts] = useState<
+    { left: string; delay: string; size: string }[]
+  >([]);
+
+  useEffect(() => {
+    audioRef.current = new Audio("/sound/90love.mp3");
+    audioRef.current.volume = 0.5;
+  }, []);
+
+  useEffect(() => {
+    const generatedHearts = Array.from({ length: 25 }).map((_, i) => ({
+      left: `${Math.random() * 100}%`,
+      delay: `${i * 0.4}s`,
+      size: `${Math.random() * 28 + 18}px`,
+    }));
+
+    setHearts(generatedHearts);
+  }, []);
+
+  // Heart cursor trail
+  useEffect(() => {
+    const handleMove = (e: MouseEvent) => {
+      const heart = document.createElement("div");
+      heart.innerText = "💖";
+      heart.className = "fixed pointer-events-none animate-heart";
+      heart.style.left = `${e.clientX}px`;
+      heart.style.top = `${e.clientY}px`;
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 1000);
+    };
+
+    window.addEventListener("mousemove", handleMove);
+    return () => window.removeEventListener("mousemove", handleMove);
+  }, []);
+
+  const moveNoButton = () => {
+    const button = noButtonRef.current;
+    if (!button) return;
+
+    const x = Math.random() * (window.innerWidth - 140);
+    const y = Math.random() * (window.innerHeight - 80);
+
+    button.style.position = "absolute";
+    button.style.left = `${x}px`;
+    button.style.top = `${y}px`;
+  };
+
+  const handleYes = async () => {
+    try {
+      await audioRef.current?.play();
+    } catch {}
+    setYesClicked(true);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <main className="relative font-bricolage-grotesk flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-pink-200 via-pink-300 to-rose-200">
+      {/* Floating hearts */}
+      <div className="absolute inset-0 pointer-events-none">
+        {hearts.map((heart, i) => (
+          <span
+            key={i}
+            className="absolute text-pink-400 animate-float"
+            style={{
+              left: heart.left,
+              animationDelay: heart.delay,
+              fontSize: heart.size,
+            }}
+          >
+            💕
+          </span>
+        ))}
+      </div>
+
+      {!yesClicked ? (
+        <div className="z-10 font-bricolage-grotesk text-center bg-white/80 backdrop-blur-xl p-10 rounded-3xl shadow-2xl animate-pop">
+          <h1
+            onClick={() => setSecret(true)}
+            className="text-4xl md:text-5xl font-bold text-pink-600 mb-4 cursor-pointer"
+          >
+            {BABE_NAME}, <br/> 
+            <br/>
+            <span>will you be my Valentine? 💖</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+
+          <p className="text-pink-400 text-lg">
+            (Hint: there’s only one correct answer 😏)
           </p>
+
+          <div className="flex gap-6 justify-center mt-8 relative">
+            <button
+              onClick={handleYes}
+              className="px-10 py-4 text-xl font-semibold rounded-full bg-pink-500 text-white shadow-lg hover:scale-110 transition"
+            >
+              YES 💘
+            </button>
+
+            <button
+              ref={noButtonRef}
+              onMouseEnter={moveNoButton}
+              onTouchStart={moveNoButton}
+              className="px-10 py-4 text-xl font-semibold rounded-full bg-gray-300 text-gray-700 shadow-lg transition"
+            >
+              NO 😒
+            </button>
+          </div>
+
+          {secret && (
+            <p className="mt-6 text-pink-500 animate-pop">
+              I love you more than you know 💝
+            </p>
+          )}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      ) : (
+        <Celebration name={BABE_NAME} />
+      )}
+    </main>
+  );
+}
+
+function Celebration({ name }: { name: string }) {
+  return (
+    <div className="z-10 font-bricolage-grotesk text-center bg-white/80 backdrop-blur-xl p-12 rounded-3xl shadow-2xl animate-pop">
+      <Confetti />
+      <h1 className="text-5xl md:text-6xl font-extrabold text-pink-600 mb-6">
+        YAYYYY!!! SHE SAID YES 💖🎉
+      </h1>
+      <p className="text-2xl text-rose-500 mb-4">
+        {name}, you’re officially my Valentine 😍
+      </p>
+
+      <h1 className="text-4xl font-bold text-pink-600 mb-4">My Treasure 💖</h1>
+
+      <p className="text-lg text-pink-500 leading-relaxed mb-6">
+        From the moment you walked into my life, everything became softer,
+        brighter, and happier. Thank you for being you.
+        <br />
+        <br />
+        Happy Valentine’s Day 💝
+      </p>
+      <p className="text-lg text-pink-400">
+        I can’t wait to love you forever 💝
+      </p>
     </div>
   );
 }
