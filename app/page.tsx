@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Confetti from "@/components/Confetti";
+import Image from "next/image";
 
 const BABE_NAME = "M. Chioma Maryann 💕";
 
@@ -90,8 +91,8 @@ export default function Home() {
             onClick={() => setSecret(true)}
             className="text-4xl md:text-5xl font-bold text-pink-600 mb-4 cursor-pointer font-bricolage-grotesk"
           >
-            {BABE_NAME}, <br/> 
-            <br/>
+            {BABE_NAME}, <br />
+            <br />
             <span>will you be my Valentine? 💖</span>
           </h1>
 
@@ -141,13 +142,17 @@ function Celebration({ name }: { name: string }) {
         {name}, you’re officially my Valentine 😍
       </p>
 
+      <Image
+        src="/gif/basketball_celebration_dance.gif"
+        alt="Kid dancing happily"
+        width={500}
+        height={500}
+        className="mx-auto"
+      />
+
       <h1 className="text-4xl font-bold text-pink-600 mb-4">My Treasure 💖</h1>
 
       <p className="text-lg text-pink-500 leading-relaxed mb-6">
-        From the moment you walked into my life, everything became softer,
-        brighter, and happier. Thank you for being you.
-        <br />
-        <br />
         Happy Valentine’s Day 💝
       </p>
       <p className="text-lg text-pink-400">
